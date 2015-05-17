@@ -2,9 +2,10 @@ from __future__ import unicode_literals
 import os
 import time
 import logging
-import kvaut.errors
 
 import requests
+
+import kvaut.errors
 
 
 RETRIES=6
@@ -16,21 +17,26 @@ def assert_is_visible(target):
 def wait_for_automation_server():
     logger.info('waiting for automation server')
 
-    connected = False
-    retry_count = 0
-    while (retry_count < RETRIES):
-        retry_count += 1
-        time.sleep(0.5)
+    def automation_server_exists():
         try:
             response = requests.get("http://0.0.0.0:5123/ping", timeout=TIMEOUT)
-            if response.status_code == 200:
-                connected = True
-                break
+            return response.status_code == 200
         except Exception as ex:
             logger.debug('error occurred while waiting for automation server: {}'.format(ex))
+            return False
 
-    if not connected:
+    if not wait_for(automation_server_exists):
         raise kvaut.errors.ServerNotFoundError('kvaut timed out waiting for automation server')
+
+def wait_for(condition, retries=RETRIES, loop_delay=0.5):
+    met_condition = False
+    retry_count = 0
+    while (retry_count < retries and not met_condition):
+        retry_count += 1
+        time.sleep(loop_delay)
+        met_condition = condition()
+
+    return met_condition
 
 log_levels = {
     'DEBUG': logging.DEBUG,
