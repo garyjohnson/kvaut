@@ -25,12 +25,6 @@ def then_i_do_not_see(context, target):
 
 @then(u'I get an error waiting for automation server')
 def i_get_an_error_waiting_for_automation_server(context):
-    raised_error = False
-    try:
-        kvaut.client.wait_for_automation_server()
-    except kvaut.errors.ServerNotFoundError as ex:
-        raised_error = True
-
     assert_raises(lambda: kvaut.client.wait_for_automation_server(), kvaut.errors.ServerNotFoundError, "Expected error to occur when waiting for automation server")
 
 
