@@ -1,20 +1,21 @@
 language: python
 python:
-  - "2.7"
-
-# command to install dependencies
+- '2.7'
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install xvfb
-#  - sudo apt-get install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev python-numpy libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev libjpeg-dev libtiff4-dev libx11-6 libX11-dev
-#  - sudo apt-get install python-setuptools python-opengl gstreamer0.10-plugins-good build-essential libgl1-mesa-dev libgles2-mesa-dev mercurial
-
+- sudo apt-get update
+- sudo apt-get install xvfb
 install:
-  - pip install --upgrade pip
-  - pip install cython==0.21.2
-  - pip install -r requirements.txt
-
-# command to run tests
+- pip install --upgrade pip
+- pip install cython==0.21.2
+- pip install -r requirements.txt
 script:
-  - xvfb-run -s "+extension GLX" shovel test
-
+- xvfb-run -s "+extension GLX" shovel test
+deploy:
+  provider: pypi
+  user:
+    secure: DWfHJo5qhLT7qFlsXlvLA8vbfe5KYSmEcabUiDNzzsCgWfJIpWgXLH5CdqBA4QyqhnbLq40gedg0CLiWCNGlUrMdxonslQdLVBw/n5ndX2zQ12VjF32QAjPIbrDjy50I92arqqKs8wOxQLkfWjq7/a3kw6bLxgMKc1wIN+x2HGw=
+  password:
+    secure: a9IvePk9W7Skm9CIoeSOCxWy4xSsGj5llmkubrwh1QQp8QTsSdYmNXaplfJqKGWJSxCcKsdhX12F4j0bEvpElyNgPT7y8R3lc63gjf6N7HeEOwJi6Mm3MBh4cN44hU6haDQKc6ogSK5rBbCxHzZvOK6s3kYhiEUAixm/zFPekoA=
+  on:
+    tags: true
+    repo: garyjohnson/kvaut
