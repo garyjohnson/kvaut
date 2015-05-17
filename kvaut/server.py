@@ -1,0 +1,70 @@
+from __future__ import unicode_literals
+
+import os
+import threading
+import logging
+import bottle
+import kivy.app
+
+
+@bottle.get("/ping")
+def ping():
+    if get_root_widget() is None:
+        bottle.abort(503, "Still booting up, try again later")
+
+    return 'Ping!'
+
+@bottle.post("/find_element")
+def find_element():
+    found_json = {}
+    value = get_query_value('value')
+    automation_type = get_query_value('automation_type')
+
+    widget = find_widget_in(get_root_widget(), value=value, automation_type=automation_type)
+    if widget is not None:
+        found_json = widget.to_json()
+
+    logger.debug('found element: {}'.format(found_json))
+    return found_json
+
+def get_query_value(name):
+    if bottle.request.json is not None:
+        return bottle.request.json.get('query', {}).get(name, '')
+
+    return ''
+
+def get_root_widget():
+    app = kivy.app.App.get_running_app()
+    return app.root
+
+def find_widget_in(parent, value=None, automation_type=None):
+    if parent is None:
+        return None
+
+    for child in parent.get_children():
+        if child.is_match(value=value, automation_type=automation_type):
+            return child
+
+        found_widget = find_widget_in(child, value=value, automation_type=automation_type)
+        if found_widget is not None:
+            return found_widget
+
+    return None
+
+def start_automation_server():
+    debug = log_level_name is 'DEBUG'
+    thread = threading.Thread(target=bottle.run, kwargs={'host':'0.0.0.0', 'port':5123, 'quiet':(not debug), 'debug':debug})
+    thread.setDaemon(True)
+    thread.start()
+
+log_levels = {
+    'DEBUG': logging.DEBUG,
+    'INFO': logging.INFO,
+    'WARNING': logging.WARNING,
+    'ERROR': logging.ERROR,
+}
+log_level_name = os.environ.get('KVAUT_LOG', 'ERROR')
+logging.basicConfig(level=log_levels[log_level_name])
+logger = logging.getLogger(__name__)
+logger.setLevel(log_levels[log_level_name])
+logger.info('kvaut log level is {}'.format(log_level_name))
