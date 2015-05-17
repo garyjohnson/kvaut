@@ -10,6 +10,7 @@ before_install:
 #  - sudo apt-get install python-setuptools python-opengl gstreamer0.10-plugins-good build-essential libgl1-mesa-dev libgles2-mesa-dev mercurial
 
 install:
+  - pip install cython==0.21.2
   - pip install -r requirements.txt
 
 # command to run tests
