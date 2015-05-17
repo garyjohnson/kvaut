@@ -1,5 +1,6 @@
 from behave import *
 from nose.tools import *
+from features.support.assertions import *
 
 import kvaut.client
 import kvaut.errors
@@ -20,14 +21,7 @@ def then_i_see(context, target):
 
 @then('I do not see "(?P<target>[^"]*)"')
 def then_i_do_not_see(context, target):
-    raised_error = False
-    try:
-        kvaut.client.assert_is_visible(target)
-    except kvaut.errors.AssertionError as ex:
-        raised_error = True
-
-    assert_true(raised_error, "Expected kvaut to raise exception when asserting visible")
-
+    assert_raises(lambda: kvaut.client.assert_is_visible(target), kvaut.errors.AssertionError, "Expected error to occur when asserting visible")
 
 @then(u'I get an error waiting for automation server')
 def i_get_an_error_waiting_for_automation_server(context):
@@ -37,5 +31,6 @@ def i_get_an_error_waiting_for_automation_server(context):
     except kvaut.errors.ServerNotFoundError as ex:
         raised_error = True
 
-    assert_true(raised_error, "Expected kvaut to raise exception when waiting for automation server")
+    assert_raises(lambda: kvaut.client.wait_for_automation_server(), kvaut.errors.ServerNotFoundError, "Expected error to occur when waiting for automation server")
+
 
