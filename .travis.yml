@@ -12,10 +12,9 @@ script:
 - xvfb-run -s "+extension GLX" shovel test
 deploy:
   provider: pypi
-  user:
-    secure: DWfHJo5qhLT7qFlsXlvLA8vbfe5KYSmEcabUiDNzzsCgWfJIpWgXLH5CdqBA4QyqhnbLq40gedg0CLiWCNGlUrMdxonslQdLVBw/n5ndX2zQ12VjF32QAjPIbrDjy50I92arqqKs8wOxQLkfWjq7/a3kw6bLxgMKc1wIN+x2HGw=
+  user: GaryJohnson
   password:
-    secure: a9IvePk9W7Skm9CIoeSOCxWy4xSsGj5llmkubrwh1QQp8QTsSdYmNXaplfJqKGWJSxCcKsdhX12F4j0bEvpElyNgPT7y8R3lc63gjf6N7HeEOwJi6Mm3MBh4cN44hU6haDQKc6ogSK5rBbCxHzZvOK6s3kYhiEUAixm/zFPekoA=
+    secure: a3DelI2lvP6PfCrMbeTDFkhwrQpl/EmvuRW/dPlB3Otvt+L2CJ43X1pM8uFgIMlyBbaBKY7fPw3coTZudtLiOGO+8yX6g1vUp+U0PjyUSvO/nGQmh0fjDi8YGCF00LTNJ2r/RwCuk6ENyiUxULQ9J2H2A92mdsNew6oeeIB2m7o=
   on:
     tags: true
     repo: garyjohnson/kvaut
