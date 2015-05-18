@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
-
 import os
 import threading
 import logging
+
 import bottle
 import kivy.app
+
+import kvaut.automator.factory as factory
 
 
 @bottle.get("/ping")
@@ -18,9 +20,8 @@ def ping():
 def find_element():
     found_json = {}
     value = get_query_value('value')
-    automation_type = get_query_value('automation_type')
 
-    widget = find_widget_in(get_root_widget(), value=value, automation_type=automation_type)
+    widget = find_widget_in(get_root_widget(), value=value)
     if widget is not None:
         found_json = widget.to_json()
 
@@ -35,17 +36,20 @@ def get_query_value(name):
 
 def get_root_widget():
     app = kivy.app.App.get_running_app()
-    return app.root
+    return factory.automate(app.root)
 
-def find_widget_in(parent, value=None, automation_type=None):
+def find_widget_in(parent, value=None):
     if parent is None:
         return None
 
+    if parent.is_match(value=value):
+        return parent
+
     for child in parent.get_children():
-        if child.is_match(value=value, automation_type=automation_type):
+        if child.is_match(value=value):
             return child
 
-        found_widget = find_widget_in(child, value=value, automation_type=automation_type)
+        found_widget = find_widget_in(child, value=value)
         if found_widget is not None:
             return found_widget
 
@@ -53,7 +57,7 @@ def find_widget_in(parent, value=None, automation_type=None):
 
 def start_automation_server():
     debug = log_level_name is 'DEBUG'
-    thread = threading.Thread(target=bottle.run, kwargs={'host':'0.0.0.0', 'port':5123, 'quiet':(not debug), 'debug':debug})
+    thread = threading.Thread(target=bottle.run, kwargs={'host':'0.0.0.0', 'port':5155, 'quiet':(not debug), 'debug':debug})
     thread.setDaemon(True)
     thread.start()
 

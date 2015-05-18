@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 import importlib
 import logging
-import kivy.uix
 
 
 logger = logging.getLogger(__name__)
@@ -11,9 +10,10 @@ def automate(target):
 
     for class_name in automators:
         try:
-            kivy_type = getattr(kivy.uix, class_name)
-            automator_module = importlib.import_module('pqaut.automator.{}'.format(class_name.lower()))
+            kivy_module = importlib.import_module('kivy.uix.{}'.format(class_name.lower()))
+            kivy_type = getattr(kivy_module, class_name)
 
+            automator_module = importlib.import_module('kvaut.automator.{}'.format(class_name.lower()))
             automator_type = getattr(automator_module, '{}Automator'.format(class_name))
 
             if kivy_type is not None and automator_type is not None and isinstance(target, kivy_type):

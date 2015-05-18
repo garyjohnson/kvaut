@@ -3,7 +3,7 @@ Feature: Find elements by text
   I want to assert that text is visible
   So I can build tests
 
-  @later
+  @wip
   Scenario: I see text
     Given I am running "2_label.py"
     Then I see "Hello world"

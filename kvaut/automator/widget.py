@@ -1,3 +1,8 @@
+import collections
+
+import kvaut.automator.factory as factory
+
+
 class WidgetAutomator(object):
 
     def __init__(self, target):
@@ -7,14 +12,7 @@ class WidgetAutomator(object):
     def values(self):
         return [self._target.id]
 
-    @property
-    def automation_types(self):
-        return [c.__name__ for c in self._target.__bases__]
-
-    def is_match(self, value=None, automation_type=None):
-        if automation_type and automation_type not in self.automation_types:
-            return False
-
+    def is_match(self, value=None):
         if value in self.values:
             return True
 
@@ -24,9 +22,9 @@ class WidgetAutomator(object):
         return [factory.automate(c) for c in self._target.children];
 
     def to_json(self, is_recursive=False):
-        json=OrderedDict([ 
+        json=collections.OrderedDict([ 
             ('type',self._target.__class__.__name__), 
-            ('values',self.get_values()),  
+            ('values',self.values),  
         ])
 
         if is_recursive:
