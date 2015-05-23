@@ -1,4 +1,4 @@
-Feature: Find elements by text
+Feature: Automate label
   As a developer testing my app
   I want to assert that text is visible
   So I can build tests
