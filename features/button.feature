@@ -10,3 +10,9 @@ Feature: Automate button
   Scenario: I see button by id
     Given I am running "3_button.py"
     Then I see "goodbye_world"
+
+  @wip
+  Scenario: I can tap button
+    Given I am running "3_button.py"
+    When I tap "Hello world"
+    Then I see "Howdy"

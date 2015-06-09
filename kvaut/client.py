@@ -32,6 +32,10 @@ def find_element(target):
 
     return found_element
 
+def tap(target):
+    assert_is_visible(target)
+    tap(target)
+
 def wait_for_automation_server():
     logger.info('waiting for automation server')
 

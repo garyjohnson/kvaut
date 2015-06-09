@@ -1,5 +1,7 @@
 import collections
 
+from kivy.input.motionevent import MotionEvent
+
 import kvaut.automator.factory as factory
 
 
@@ -20,6 +22,11 @@ class WidgetAutomator(object):
 
     def get_children(self):
         return [factory.automate(c) for c in self._target.children];
+
+    def tap(self):
+        event = MotionEvent(None, "tap", None)
+        self._target.on_touch_down(event)
+        self._target.on_touch_up(event)
 
     def to_json(self, is_recursive=False):
         json=collections.OrderedDict([ 

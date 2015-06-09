@@ -27,4 +27,6 @@ def then_i_do_not_see(context, target):
 def i_get_an_error_waiting_for_automation_server(context):
     assert_raises(lambda: kvaut.client.wait_for_automation_server(), kvaut.errors.ServerNotFoundError, "Expected error to occur when waiting for automation server")
 
-
+@when(u'I tap "(?P<target>[^"]*)"')
+def i_tap(context, target):
+    kvaut.client.tap(target)

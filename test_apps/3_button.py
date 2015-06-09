@@ -5,19 +5,27 @@ import kvaut.server as kvaut
 
 import kivy
 from kivy.app import App
+from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.popup import Popup
 
 
 class MyApp(App):
 
     def build(self):
+        def show_popup(self):
+            popup = Popup(title='Test', content=Label(text='Howdy'), size_hint=(None, None), size=(400, 400))
+            popup.open()
+
         root = StackLayout()
         button1 = Button(text='Hello world', size=(100,25), size_hint=(None,None))
+        button1.bind(on_press=show_popup)
         button2 = Button(id='goodbye_world', text='test', size=(100,25), size_hint=(None,None))
         root.add_widget(button1)
         root.add_widget(button2)
         return root
+
 
 kvaut.start_automation_server()
 MyApp().run()

@@ -28,6 +28,18 @@ def find_element():
     logger.debug('found element: {}'.format(found_json))
     return found_json
 
+@bottle.post("/tap")
+def tap():
+    found_json = {}
+    value = get_query_value('value')
+
+    widget = find_widget_in(get_root_widget(), value=value)
+    if widget is not None:
+        found_json = widget.to_json()
+        widget.tap()
+
+    return found_json
+
 def get_query_value(name):
     if bottle.request.json is not None:
         return bottle.request.json.get('query', {}).get(name, '')

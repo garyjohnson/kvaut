@@ -1,5 +1,4 @@
-cython==0.21.2
-kivy
+tox
 argparse
 shovel
 behave

@@ -9,12 +9,12 @@ from setuptools import setup
 
 setup(
     name='kvaut',
-    version='0.0.3',
+    version='0.0.4',
     author='Gary Johnson',
     author_email = 'gary@gjtt.com',
     description = 'Automation for BDD testing Kivy apps',
     install_requires=['bottle'],
     tests_require=['bottle'],
     license = 'MIT License',
-    packages = ['kvaut'],
+    packages = ['kvaut', 'kvaut.automator', 'kvaut.errors', 'kvaut.helpers'],
     )

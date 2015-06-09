@@ -4,4 +4,7 @@
 UI automation to enable BDD-style testing for Kivy apps.
 
 ## Requirements
-kivy.app must be installed with symlinks. 
+cython and kivy must be installed into system site packages for both python2 and python3. See {} for install instructions on OSX.
+
+## Running tests
+pip install tox and run tox.
