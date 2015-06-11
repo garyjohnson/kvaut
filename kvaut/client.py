@@ -30,11 +30,24 @@ def find_element(target):
     except Exception as ex:
         logger.debug('error occurred attempting to find element matching \"{}\": {}'.format(target, ex))
 
+    print("found element {}".format(found_element))
     return found_element
 
 def tap(target):
     assert_is_visible(target)
-    tap(target)
+
+    tapped_element = None
+    try:
+        body = {'query':{'value':target }}
+        response = requests.post(url_for('/tap'), data=json.dumps(body), headers=JSON_HEADERS, timeout=TIMEOUT)
+        tapped_element = response.json()
+        if len(tapped_element.keys()) == 0:
+            tapped_element = None
+    except Exception as ex:
+        logger.debug('error occurred attempting to tap element matching \"{}\": {}'.format(target, ex))
+
+    print("tapped element {}".format(tapped_element))
+    return tapped_element
 
 def wait_for_automation_server():
     logger.info('waiting for automation server')

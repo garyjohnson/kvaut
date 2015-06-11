@@ -19,7 +19,7 @@ def automate(target):
             if kivy_type is not None and automator_type is not None and isinstance(target, kivy_type):
                 return automator_type(target)
         except Exception as ex:
-            logger.debug('could not import {}: {}'.format(class_name, ex))
+            logger.error('could not import {}: {}'.format(class_name, ex))
             continue
 
     raise Exception('No automator found for {}'.format(target))

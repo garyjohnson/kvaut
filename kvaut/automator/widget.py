@@ -1,14 +1,18 @@
 import collections
 
-from kivy.input.motionevent import MotionEvent
-
+import kivy.app
+from kivy.clock import Clock
 import kvaut.automator.factory as factory
+import kvaut.automator.tapper as tapper
 
 
 class WidgetAutomator(object):
 
     def __init__(self, target):
         self._target = target
+
+    def global_center(self):
+        return self._target.to_window(self._target.center_x, self._target.center_y)
 
     @property
     def values(self):
@@ -22,11 +26,9 @@ class WidgetAutomator(object):
 
     def get_children(self):
         return [factory.automate(c) for c in self._target.children];
-
+		
     def tap(self):
-        event = MotionEvent(None, "tap", None)
-        self._target.on_touch_down(event)
-        self._target.on_touch_up(event)
+        tapper.tap(self)
 
     def to_json(self, is_recursive=False):
         json=collections.OrderedDict([ 

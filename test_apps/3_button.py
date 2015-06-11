@@ -14,13 +14,13 @@ from kivy.uix.popup import Popup
 class MyApp(App):
 
     def build(self):
-        def show_popup(self):
-            popup = Popup(title='Test', content=Label(text='Howdy'), size_hint=(None, None), size=(400, 400))
-            popup.open()
+
 
         root = StackLayout()
         button1 = Button(text='Hello world', size=(100,25), size_hint=(None,None))
-        button1.bind(on_press=show_popup)
+        def change_text(self):
+            button1.text = 'Howdy'
+        button1.bind(on_press=change_text)
         button2 = Button(id='goodbye_world', text='test', size=(100,25), size_hint=(None,None))
         root.add_widget(button1)
         root.add_widget(button2)

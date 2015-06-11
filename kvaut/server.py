@@ -16,6 +16,12 @@ def ping():
 
     return 'Ping!'
 
+@bottle.get("/tree")
+def tree():
+    widget = get_root_widget()
+    if widget is not None:
+        return widget.to_json(is_recursive=True)
+
 @bottle.post("/find_element")
 def find_element():
     found_json = {}
