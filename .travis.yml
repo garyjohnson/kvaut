@@ -4,7 +4,9 @@ python:
 before_install:
 - sudo add-apt-repository ppa:kivy-team/kivy -y
 - sudo apt-get update
-- sudo apt-get install xvfb python3 python3-dev python python-dev python3-deadsnakes python3-kivy-common python3-kivy-bin  python3-pygame python-kivy python3-kivy
+- sudo apt-get install -y python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev python-numpy libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev libjpeg-dev libtiff4-dev libx11-6 libX11-dev
+- sudo apt-get install -y python-setuptools python-opengl gstreamer0.10-plugins-good build-essential libgl1-mesa-dev libgles2-mesa-dev mercurial
+- sudo apt-get install -y xvfb
 install:
 - pip install --upgrade pip
 - pip install -r requirements.txt
