@@ -2,7 +2,7 @@ language: python
 python:
 - '2.7'
 before_install:
-- sudo add-apt-repository ppa:kivy-team/kivy
+- sudo add-apt-repository ppa:kivy-team/kivy -y
 - sudo apt-get update
 - sudo apt-get install xvfb python-kivy python3-kivy
 install:
