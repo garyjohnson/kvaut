@@ -7,9 +7,11 @@ before_install:
 - sudo apt-get update
 
 - sudo apt-get install -y build-essential git python2.7 python-dev python-pip python-setuptools
+- sudo apt-get install -y libmtdev-dev libmtdev1
 - sudo apt-get install -y libgstreamer1.0-0 libgstreamer1.0-dev libgstreamer1.0-0-dbg gstreamer1.0-plugins-good
 - sudo apt-get install -y libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-net libsdl2-net-dev libsdl2-ttf libsdl2-ttf-dev
 - sudo apt-get install -y python-opengl python-enchant mesa-common-dev-lts-quantal libgl1-mesa-dev-lts-quantal libgles2-mesa-dev-lts-quantal libegl1-mesa-dev-lts-quantal libegl1-mesa-drivers-lts-quantal
+
 - sudo pip install cython==0.21.2
 - sudo pip install kivy
 - sudo pip install virtualenv
