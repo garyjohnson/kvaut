@@ -15,7 +15,7 @@ before_install:
 install:
 - sudo pip install -r requirements.txt
 script:
-- shovel ci_test
+- shovel debug_test
 deploy:
   provider: pypi
   user: GaryJohnson
