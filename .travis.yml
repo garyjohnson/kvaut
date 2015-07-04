@@ -2,24 +2,20 @@ language: python
 python:
 - '2.7'
 before_install:
-- sudo add-apt-repository ppa:kivy-team/kivy -y
+- sudo apt-add-repository --yes ppa:zoogie/sdl2-snapshots
+- sudo add-apt-repository ppa:gstreamer-developers/ppa
 - sudo apt-get update
-- sudo apt-get install -y build-essential mercurial git python2.7 python-dev ffmpeg libfreetype6-dev libjpeg-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libsdl1.2-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev unzip
+
+- sudo apt-get install -y build-essential git python2.7 python-dev python-pip python-setuptools
+- sudo apt-get install -y libgstreamer1.0-0 libgstreamer1.0-dev libgstreamer1.0-0-dbg gstreamer1.0-plugins-good
+- sudo apt-get install -y libsdl2 libsdl2-dev libsdl2-mixer libsdl2-mixer-dev libsdl2-image libsdl2-image-dev libsdl2-net libsdl2-net-dev libsdl2-ttf libsdl2-ttf-dev
+- sudo apt-get install -y python-opengl python-enchant mesa-common-dev-lts-quantal libgl1-mesa-dev-lts-quantal libgles2-mesa-dev-lts-quantal libegl1-mesa-dev-lts-quantal libegl1-mesa-drivers-lts-quantal
 - sudo pip install cython==0.21.2
-- sudo pip install -U numpy
-- hg clone https://bitbucket.org/pygame/pygame
-- (cd pygame; python setup.py build; sudo python setup.py install)
-- sudo apt-get install -y python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev python-numpy libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev libjpeg-dev libtiff4-dev libx11-6 libX11-dev
-- sudo apt-get install -y python-setuptools python-opengl gstreamer0.10-plugins-good build-essential libgl1-mesa-dev libgles2-mesa-dev mercurial
-- sudo apt-get build-dep -y python-pygame
-- sudo apt-get install -y python-pygame
-- sudo apt-get install -y python-kivy
-- sudo apt-get install -y xvfb
+- sudo pip install kivy
 install:
-- pip install --upgrade pip
-- pip install -r requirements.txt
+- sudo pip install -r requirements.txt
 script:
-- xvfb-run -s "+extension GLX" shovel test
+- shovel test
 deploy:
   provider: pypi
   user: GaryJohnson
