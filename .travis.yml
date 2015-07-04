@@ -12,8 +12,11 @@ before_install:
 - sudo apt-get install -y python-opengl python-enchant mesa-common-dev-lts-quantal libgl1-mesa-dev-lts-quantal libgles2-mesa-dev-lts-quantal libegl1-mesa-dev-lts-quantal libegl1-mesa-drivers-lts-quantal
 - sudo pip install cython==0.21.2
 - sudo pip install kivy
+- sudo pip install virtualenv
 install:
-- sudo pip install -r requirements.txt
+- virtualenv .venv --system-site-packages
+- source .venv/bin/activate
+- pip install -r requirements.txt
 script:
 - shovel debug_test
 deploy:
