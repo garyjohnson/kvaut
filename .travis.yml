@@ -3,7 +3,7 @@ python:
 - '2.7'
 before_install:
 - sudo apt-add-repository --yes ppa:zoogie/sdl2-snapshots
-- sudo add-apt-repository ppa:gstreamer-developers/ppa
+- sudo apt-add-repository --yes ppa:gstreamer-developers/ppa
 - sudo apt-get update
 
 - sudo apt-get install -y build-essential git python2.7 python-dev python-pip python-setuptools
