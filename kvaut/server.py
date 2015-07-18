@@ -4,7 +4,6 @@ import threading
 import logging
 
 import bottle
-import kivy.app
 
 import kvaut.automator.factory as factory
 
@@ -53,6 +52,7 @@ def get_query_value(name):
     return ''
 
 def get_root_widget():
+    import kivy.app
     app = kivy.app.App.get_running_app()
     return factory.automate(app.root)
 
