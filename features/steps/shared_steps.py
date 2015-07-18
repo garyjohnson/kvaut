@@ -6,9 +6,15 @@ import kvaut.client
 import kvaut.errors
 import features.support.app_helpers as app_helpers
 
+
 @when('I launch "(?P<app_name>[^"]*)"')
 def i_launch(context, app_name):
     app_helpers.launch_app(context, app_name)
+
+@given('I am running "(?P<app_name>[^"]*)" with arg "(?P<arg>[^"]*)"')
+def i_am_running_app_with_arg(context, app_name, arg):
+    app_helpers.launch_app(context, app_name, arg)
+    kvaut.client.wait_for_automation_server()
 
 @given('I am running "(?P<app_name>[^"]*)"')
 def i_am_running_app(context, app_name):

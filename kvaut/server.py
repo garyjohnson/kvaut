@@ -79,6 +79,11 @@ def start_automation_server():
     thread.setDaemon(True)
     thread.start()
 
+def start_automation_server_if_in(args):
+    if '--automation_server' in args:
+        args.remove('--automation_server')
+        start_automation_server()
+
 log_levels = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,
