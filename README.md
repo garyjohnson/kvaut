@@ -10,14 +10,13 @@ kvaut is a client / server library that enables BDD-style testing in your kivy a
 First, you need to get *kvaut* and *behave* installed. Assuming you are using pip, add them to your requirements.txt file and install them from PyPi.
 
 ### Running the Automation Server
-In your application, you need to run the kvaut server. It's good to put it behind a launch argument so that it only runs while you're testing. Here's an example of doing this in main.py of your kivy app:
+In your application, you need to run the kvaut server. Here's an example of doing this in main.py of your kivy app. Even though it looks like it's always being run, it will only do any work if **KVAUT_ENABLE=1** is in your environment variables.
 
 ```
 import kvaut.server
 
 if __name__ == '__main__':
-    if '--automation_server' in sys.argv:
-        kvaut.server.start_automation_server()
+    kvaut.server.start_automation_server()
 
     # Start up our kivy application down here
 ```
@@ -26,13 +25,15 @@ if __name__ == '__main__':
 Now we need to set up our first behave test to launch our app. In your `features\environment.py` file (create it if you don't have it, add something like this:
 
 ```
+import os
 import subprocess
 import kvaut.client
 
 APP_PATH = '<path to your app>'
 
 def before_scenario(context, scenario):
-    context.test_app_process = subprocess.Popen([APP_PATH, "--automation_server"])
+    os.environ['KVAUT_ENABLE'] = '1'
+    context.test_app_process = subprocess.Popen([APP_PATH, "--automation_server"], {'env':os.environ})
     kvaut.client.wait_for_automation_server()
 
 def after_scenario(context, scenario):

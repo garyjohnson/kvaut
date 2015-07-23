@@ -74,15 +74,14 @@ def find_widget_in(parent, value=None):
     return None
 
 def start_automation_server():
-    debug = log_level_name is 'DEBUG'
-    thread = threading.Thread(target=bottle.run, kwargs={'host':'0.0.0.0', 'port':5155, 'quiet':(not debug), 'debug':debug})
-    thread.setDaemon(True)
-    thread.start()
-
-def start_automation_server_if_in(args):
-    if '--automation_server' in args:
-        args.remove('--automation_server')
-        start_automation_server()
+    if os.environ.get('KVAUT_ENABLE', None):
+        logger.info('kvaut server starting...')
+        debug = log_level_name is 'DEBUG'
+        thread = threading.Thread(target=bottle.run, kwargs={'host':'0.0.0.0', 'port':5155, 'quiet':(not debug), 'debug':debug})
+        thread.setDaemon(True)
+        thread.start()
+    else:
+        logger.info('kvaut is disabled!')
 
 log_levels = {
     'DEBUG': logging.DEBUG,
