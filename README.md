@@ -80,5 +80,5 @@ To see a practical example of kvaut in action, check out [ci_screen_2](https://g
 Also, kvaut uses itself for testing. You can run `behave` from the project directory to run the tests, and see the kivy apps used for testing in the `test_apps/` directory
 
 ## Contributing
-To run kvaut tests, run `shovel test`. Tests are currently run against python2.7 and python3.4, so kivy needs to be installed and available in the $PYTHONPATH for both instances. (To install kivy as a python package on OSX, you can use [this gist](https://gist.github.com/garyjohnson/53c1eef4adaf57c247a4) for reference).
+To run kvaut tests, run `shovel test`. Tests are run using [tox](https://pypi.python.org/pypi/tox) so make sure it's installed and that you aren't already in a virtualenv. Tests are currently run against python2.7 and python3.4, so kivy needs to be installed and available in the $PYTHONPATH for both instances. (To install kivy as a python package on OSX, you can use [this gist](https://gist.github.com/garyjohnson/53c1eef4adaf57c247a4) for reference).
 
