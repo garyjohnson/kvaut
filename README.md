@@ -74,6 +74,22 @@ def i_see(step, text):
 
 This, of course, assumes your kivy app has a button labeled 'Say Hello', and tapping that button will display the text 'Hello World!' somewhere. You should be able to run `behave` from your project directory and see the app launch and the button press down.
 
+## API Reference
+
+### kvaut.client
+
+**assert_is_visible(target)**</br>
+Searches for a target element by string value (currently text or id) in a wait loop and raises a `kvaut.errors.AssertionError` if no matching element is found within a timeout.
+
+**find_element(target)**</br>
+Searches for a target element by string value (currently text or id) and returns a JSON representation of the element as a `dict` or `None` if no matching element is found.
+
+**tap(target)**</br>
+Asserts that a target element is visible by string value (currently text or id) and taps on the center of that element.
+
+**wait_for_automation_server()**</br>
+Enters a wait loop for an automation server to be running. Raises a `kvaut.errors.ServerNotFoundError` if none are found within a timeout.
+
 ## Other Examples
 To see a practical example of kvaut in action, check out [ci_screen_2](https://github.com/garyjohnson/ci_screen_2).
 
