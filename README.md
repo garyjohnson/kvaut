@@ -22,7 +22,7 @@ if __name__ == '__main__':
 ```
 
 ### Setting up the Automation Client
-Now we need to set up our first behave test to launch our app. In your `features\environment.py` file (create it if you don't have it, add something like this:
+Now we need to set up our first behave test to launch our app. In your `features\environment.py` file (create it if you don't have it), add something like this:
 
 ```
 import os
@@ -33,7 +33,7 @@ APP_PATH = '<path to your app>'
 
 def before_scenario(context, scenario):
     os.environ['KVAUT_ENABLE'] = '1'
-    context.test_app_process = subprocess.Popen([APP_PATH, "--automation_server"], {'env':os.environ})
+    context.test_app_process = subprocess.Popen([APP_PATH], {'env':os.environ})
     kvaut.client.wait_for_automation_server()
 
 def after_scenario(context, scenario):
@@ -63,11 +63,11 @@ from behave import *
 
 use_step_matcher("re")
 
-@when(u'I tap button "(?P<button_text>[^"]*)"$')
+@when(u'I tap button "(?P<button_text>[^"]*)"')
 def i_tap_button(step, button_text):
   kvaut.client.tap(button_text)
 
-@then(u'I see "(?P<text>[^"]*)"$')
+@then(u'I see "(?P<text>[^"]*)"')
 def i_see(step, text):
   kvaut.client.assert_is_visible(text)
 ```
@@ -80,5 +80,5 @@ To see a practical example of kvaut in action, check out [ci_screen_2](https://g
 Also, kvaut uses itself for testing. You can run `behave` from the project directory to run the tests, and see the kivy apps used for testing in the `test_apps/` directory
 
 ## Contributing
-To run kvaut tests, run `shovel test`. Tests are currently run against python2.7 and python3.4, so kivy needs to be installed and available to both instances. (To install kivy as a python package on OSX, you can use [this gist](https://gist.github.com/garyjohnson/53c1eef4adaf57c247a4) for reference).
+To run kvaut tests, run `shovel test`. Tests are currently run against python2.7 and python3.4, so kivy needs to be installed and available in the $PYTHONPATH for both instances. (To install kivy as a python package on OSX, you can use [this gist](https://gist.github.com/garyjohnson/53c1eef4adaf57c247a4) for reference).
 
