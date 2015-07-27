@@ -4,5 +4,5 @@ Feature: Launch automation server
   So I keep performance running good
 
   Scenario: I launch app without env vars
-    Given I am running "1_widget.py" without enabling server
+    Given I am running "_1_widget.py" without enabling server
     Then I get an error waiting for automation server

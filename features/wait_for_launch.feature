@@ -4,5 +4,5 @@ Feature: Wait for launch
   So I can run assertions against it
 
   Scenario: I see widget
-    When I launch "0_no_server.py"
+    When I launch "_0_no_server.py"
     Then I get an error waiting for automation server

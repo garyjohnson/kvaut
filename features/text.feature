@@ -4,5 +4,5 @@ Feature: Automate label
   So I can build tests
 
   Scenario: I see text
-    Given I am running "2_label.py"
+    Given I am running "_2_label.py"
     Then I see "Hello world"

@@ -4,15 +4,14 @@ Feature: Automate button
   So I can build tests
 
   Scenario: I see button
-    Given I am running "3_button.py"
+    Given I am running "_3_button.py"
     Then I see "Hello world"
 
   Scenario: I see button by id
-    Given I am running "3_button.py"
+    Given I am running "_3_button.py"
     Then I see "goodbye_world"
 
-  @wip
   Scenario: I can tap button
-    Given I am running "3_button.py"
+    Given I am running "_3_button.py"
     When I tap "Hello world"
     Then I see "Howdy"
