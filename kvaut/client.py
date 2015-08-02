@@ -14,6 +14,16 @@ JSON_HEADERS = {'Content-type': 'application/json', 'Accept': 'application/json'
 SERVER="http://0.0.0.0:5155"
 TIMEOUT=3
 
+def assert_is_active(target):
+    element = find_element(target)
+    logger.debug("found element:")
+    logger.debug(element)
+
+def assert_is_not_active(target):
+    element = find_element(target)
+    logger.debug("found element:")
+    logger.debug(element)
+
 def assert_is_visible(target):
     if not wait_for(lambda: find_element(target)):
         raise kvaut.errors.AssertionError('Could not find element matching \"{}\"'.format(target))
@@ -30,7 +40,6 @@ def find_element(target):
     except Exception as ex:
         logger.debug('error occurred attempting to find element matching \"{}\": {}'.format(target, ex))
 
-    print("found element {}".format(found_element))
     return found_element
 
 def tap(target):

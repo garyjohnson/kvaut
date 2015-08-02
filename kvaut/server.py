@@ -63,6 +63,10 @@ def find_widget_in(parent, value=None):
     if parent.is_match(value=value):
         return parent
 
+    for kv_id in parent.get_kv_ids():
+        if kv_id.is_match(value=value):
+            return kv_id
+
     for child in parent.get_children():
         if child.is_match(value=value):
             return child

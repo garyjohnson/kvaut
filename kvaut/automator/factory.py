@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def automate(target):
+def automate(target, kv_id=None):
     automators = ['Label','Widget']
 
     for class_name in automators:
@@ -17,7 +17,7 @@ def automate(target):
             automator_type = getattr(automator_module, '{}Automator'.format(class_name))
 
             if kivy_type is not None and automator_type is not None and isinstance(target, kivy_type):
-                return automator_type(target)
+                return automator_type(target, kv_id)
         except Exception as ex:
             logger.error('could not import {}: {}'.format(class_name, ex))
             continue
