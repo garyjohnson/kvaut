@@ -25,8 +25,9 @@ def tree():
 def find_element():
     found_json = {}
     value = get_query_value('value')
+    custom_attributes = get_query_value('custom_attributes', default={})
 
-    widget = find_widget_in(get_root_widget(), value=value)
+    widget = find_widget_in(get_root_widget(), value=value, **custom_attributes)
     if widget is not None:
         found_json = widget.to_json()
 
@@ -37,41 +38,42 @@ def find_element():
 def tap():
     found_json = {}
     value = get_query_value('value')
+    custom_attributes = get_query_value('custom_attributes', default={})
 
-    widget = find_widget_in(get_root_widget(), value=value)
+    widget = find_widget_in(get_root_widget(), value=value, **custom_attributes)
     if widget is not None:
         found_json = widget.to_json()
         widget.tap()
 
     return found_json
 
-def get_query_value(name):
+def get_query_value(name, default=''):
     if bottle.request.json is not None:
-        return bottle.request.json.get('query', {}).get(name, '')
+        return bottle.request.json.get('query', {}).get(name, default)
 
-    return ''
+    return default
 
 def get_root_widget():
     import kivy.app
     app = kivy.app.App.get_running_app()
     return factory.automate(app.root)
 
-def find_widget_in(parent, value=None):
+def find_widget_in(parent, value=None, **custom_attributes):
     if parent is None:
         return None
 
-    if parent.is_match(value=value):
+    if parent.is_match(value=value, **custom_attributes):
         return parent
 
     for kv_id in parent.get_kv_ids():
-        if kv_id.is_match(value=value):
+        if kv_id.is_match(value=value, **custom_attributes):
             return kv_id
 
     for child in parent.get_children():
-        if child.is_match(value=value):
+        if child.is_match(value=value, **custom_attributes):
             return child
 
-        found_widget = find_widget_in(child, value=value)
+        found_widget = find_widget_in(child, value=value, **custom_attributes)
         if found_widget is not None:
             return found_widget
 

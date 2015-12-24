@@ -22,7 +22,7 @@ class WidgetAutomator(object):
     def values(self):
         return [v for v in [self._target.id, self._kv_id] if v != None]
 
-    def is_match(self, value=None):
+    def is_match(self, value=None, **custom_attributes):
         if value in self.values:
             return True
 
