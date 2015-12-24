@@ -15,7 +15,7 @@ def debug_test():
 
 @shovel.task
 def wip():
-    subprocess.call('behave --tags @wip', shell=True)
+    subprocess.call('tox -- --tags @wip', shell=True)
 
 @shovel.task
 def upload():

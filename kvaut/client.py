@@ -24,15 +24,18 @@ def assert_is_not_active(target):
     logger.debug("found element:")
     logger.debug(element)
 
-def assert_is_visible(target):
-    if not wait_for(lambda: find_element(target)):
+def assert_is_visible(target, **kwargs):
+    if not wait_for(lambda: find_element(target, **kwargs)):
         raise kvaut.errors.AssertionError('Could not find element matching \"{}\"'.format(target))
 
-def find_element(target):
+def find_element(target, **kwargs):
     found_element = None
 
+    if kwargs is None:
+        kwargs = {}
+
     try:
-        body = {'query':{'value':target }}
+        body = {'query':{'value':target, 'custom_attributes':kwargs}}
         response = requests.post(url_for('/find_element'), data=json.dumps(body), headers=JSON_HEADERS, timeout=TIMEOUT)
         found_element = response.json()
         if len(found_element.keys()) == 0:
