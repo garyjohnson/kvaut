@@ -16,3 +16,11 @@ def debug_test():
 @shovel.task
 def wip():
     subprocess.call('behave --tags @wip', shell=True)
+
+@shovel.task
+def upload():
+    subprocess.call('python setup.py sdist upload -r pypi', shell=True)
+
+@shovel.task
+def upload_test():
+    subprocess.call('python setup.py sdist upload -r pypitest', shell=True)
