@@ -55,7 +55,7 @@ def tap(target):
     except Exception as ex:
         logger.debug('error occurred attempting to tap element matching \"{}\": {}'.format(target, ex))
 
-    print("tapped element {}".format(tapped_element))
+    logger.debug("tapped element {}".format(tapped_element))
     return tapped_element
 
 def wait_for_automation_server():

@@ -6,6 +6,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 def automate(target, kv_id=None):
+    if target is None:
+        return None
+
     automators = ['Label','Widget']
 
     for class_name in automators:

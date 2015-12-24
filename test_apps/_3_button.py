@@ -15,7 +15,6 @@ class MyApp(App):
 
     def build(self):
 
-
         root = StackLayout()
         button1 = Button(text='Hello world', size=(100,25), size_hint=(None,None))
         def change_text(self):

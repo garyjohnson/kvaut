@@ -1,3 +1,3 @@
 class ToggleBehavior(object):
+    pass
 
-    sd
