@@ -4,12 +4,22 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+custom_automators = []
+
+def register(*automators):
+    global custom_automators
+    custom_automators.extend(automators)
 
 def automate(target, kv_id=None):
     if target is None:
         return None
 
     automators = ['Label','Widget']
+
+    for (target_type, automator_type) in custom_automators:
+        if isinstance(target, target_type):
+            logger.debug('building {} for {}'.format(automator_type, target_type))
+            return automator_type(target, kv_id)
 
     for class_name in automators:
         try:

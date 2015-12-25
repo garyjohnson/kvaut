@@ -89,6 +89,7 @@ def start_automation_server():
     else:
         logger.info('kvaut is disabled!')
 
+
 log_levels = {
     'DEBUG': logging.DEBUG,
     'INFO': logging.INFO,
