@@ -3,7 +3,6 @@ Feature: Custom Automator
   I want to build custom automators
   So I can automate my custom widgets
 
-  @wip
   Scenario: Custom criteria causes built-in automators to fail match
     Given I am running "_1_widget.py"
     Then I do not see "my_widget" with attributes
@@ -13,11 +12,11 @@ Feature: Custom Automator
   Scenario: Find by custom attributes
     Given I am running "_6_custom_widget.py"
     Then I see "my_custom_widget" with attributes
-      | name       | value   |
-      | is_active  | True    |
+      | name    | value   |
+      | status  | ok      |
 
   Scenario: Fail to find by custom attributes
     Given I am running "_6_custom_widget.py"
     Then I do not see "my_custom_widget" with attributes
-      | name       | value    |
-      | is_active  | False    |
+      | name    | value   |
+      | status  | not ok  |
