@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name='kvaut',
-    version='0.0.14',
+    version='0.0.15',
     author='Gary Johnson',
     author_email = 'gary@gjtt.com',
     description = 'Automation for BDD testing Kivy apps',
