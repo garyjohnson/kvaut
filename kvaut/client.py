@@ -29,24 +29,37 @@ def assert_is_visible(target, **kwargs):
     if not wait_for(lambda: find_element(target, **kwargs)):
         raise kvaut.errors.AssertionError('Could not find element matching \"{}\"'.format(target))
 
+def find_above(above, below):
+    above_element = find_element(above)
+    below_element = find_element(below)
+
+    above_y = above_element.get('global_position', {}).get('y', 0)
+    below_y = below_element.get('global_position', {}).get('y', 0)
+    logger.debug('Found expected above element \'{}\' at Y position {}, below element \'{}\' at Y position {}'.format(above_element, above_y, below_element, below_y))
+    return above_y > below_y
+
+def find_leading(leading, trailing):
+    leading_element = find_element(leading)
+    trailing_element = find_element(trailing)
+
+    leading_x = leading_element.get('global_position', {}).get('x', 0)
+    trailing_x = trailing_element.get('global_position', {}).get('x', 0)
+    logger.debug('Found expected leading element \'{}\' at X position {}, trailing element \'{}\' at X position {}'.format(leading_element, leading_x, trailing_element, trailing_x))
+    return leading_x < trailing_x
+
 def assert_is_above(above, below):
     assert_is_visible(above)
     assert_is_visible(below)
 
-    above_y = 0
-    below_y = 0
-    for retry in range(10):
-        above_element = find_element(above)
-        below_element = find_element(below)
+    if not wait_for(lambda: find_above(above, below)):
+        raise kvaut.errors.AssertionError('Expected {} to be above {}'.format(above, below))
 
-        above_y = above_element.get('global_position', {}).get('y', 0)
-        below_y = below_element.get('global_position', {}).get('y', 0)
-        if above_y < below_y: 
-            break 
+def assert_is_leading(leading, trailing):
+    assert_is_visible(leading)
+    assert_is_visible(trailing)
 
-        time.sleep(0.5)
-
-    assert_true(above_y < below_y, u'Expected "{above}" (y:{above_y}) to be above "{below}" (y:{below_y})'.format(above=above, below=below, above_y=above_y, below_y=below_y))
+    if not wait_for(lambda: find_leading(leading, trailing)):
+        raise kvaut.errors.AssertionError('Expected {} to be leading {}'.format(leading, trailing))
 
 def find_element(target, **kwargs):
     found_element = None

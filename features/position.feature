@@ -5,5 +5,9 @@ Feature: Position
 
   Scenario: Widgets above others
     Given I am running "_7_position.py"
-    Then "top" is above "bottom"
+    Then "cyan" is above "magenta"
+
+  Scenario: Widgets above others
+    Given I am running "_7_position.py"
+    Then "red" is leading "green"
 
