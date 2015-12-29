@@ -41,9 +41,12 @@ class WidgetAutomator(object):
         tapper.tap(self)
 
     def to_json(self, is_recursive=False):
+        x,y = self.global_center()
+
         json=collections.OrderedDict([ 
-            ('type',self._target.__class__.__name__), 
-            ('values',self.values),  
+            ('type', self._target.__class__.__name__), 
+            ('values', self.values),  
+            ('global_position', {'x': x, 'y': y}),
         ])
 
         if is_recursive:

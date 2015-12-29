@@ -5,6 +5,7 @@ import json
 import logging
 
 import requests
+from nose.tools import assert_true 
 
 from kvaut.helpers.wait import *
 import kvaut.errors
@@ -27,6 +28,25 @@ def assert_is_not_active(target):
 def assert_is_visible(target, **kwargs):
     if not wait_for(lambda: find_element(target, **kwargs)):
         raise kvaut.errors.AssertionError('Could not find element matching \"{}\"'.format(target))
+
+def assert_is_above(above, below):
+    assert_is_visible(above)
+    assert_is_visible(below)
+
+    above_y = 0
+    below_y = 0
+    for retry in range(10):
+        above_element = find_element(above)
+        below_element = find_element(below)
+
+        above_y = above_element.get('global_position', {}).get('y', 0)
+        below_y = below_element.get('global_position', {}).get('y', 0)
+        if above_y < below_y: 
+            break 
+
+        time.sleep(0.5)
+
+    assert_true(above_y < below_y, u'Expected "{above}" (y:{above_y}) to be above "{below}" (y:{below_y})'.format(above=above, below=below, above_y=above_y, below_y=below_y))
 
 def find_element(target, **kwargs):
     found_element = None
