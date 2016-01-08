@@ -18,7 +18,7 @@ def _tap_on_ui_thread(automator, args):
     global_x,global_y = automator.global_center()
     app = App.get_running_app()
     
-    relative_pos = {"x": global_x * 2 / app.root.width, "y" : global_y * 2 / app.root.height}
+    relative_pos = {"x": global_x / app.root.width, "y" : global_y / app.root.height}
     touch = FakeMotionEvent("fake", 1, relative_pos)
      
     EventLoop.post_dispatch_input("begin", touch)
