@@ -40,6 +40,8 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          # Ensure old flat-layout directories don't shadow the new src/ layout
+          rm -rf kvaut features test_apps || true
           pip install ".[dev]"
 
       - name: Run tests

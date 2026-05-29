@@ -1,7 +1,0 @@
-tox
-argparse
-shovel
-behave
-requests
-nose
-bottle
