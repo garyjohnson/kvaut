@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kvaut"
+dynamic = ["version"]
+description = "Automation for testing Kivy apps"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Gary Johnson", email = "gary@gjtt.com" },
+]
+requires-python = ">=3.10"
+dependencies = [
+    "kivy>=2.1.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-timeout>=2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/garyjohnson/kvaut"
+Repository = "https://github.com/garyjohnson/kvaut"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+# Write version to src/kvaut/_version.py
+write_to = "src/kvaut/_version.py"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "app_module: specify the module path for kvaut_client fixture",
+    "integration: integration tests that launch a real Kivy subprocess",
+]

@@ -1,100 +1,154 @@
 # kvaut
-UI automation to enable BDD-style testing for Kivy apps.
+
+Automation for testing [Kivy](https://kivy.org) apps. Think Playwright, but for Kivy widgets.
 
 ## Requirements
-kivy must be installed. Currently tested with kivy 1.9.x.
+
+- Python 3.10+
+- Kivy 2.1+
 
 ## Getting Started
-kvaut is a client / server library that enables BDD-style testing in your kivy apps. We use kvaut with [behave](http://pythonhosted.org/behave/) to make test assertions against our UI.
 
-First, you need to get *kvaut* and *behave* installed. Assuming you are using pip, add them to your requirements.txt file and install them from PyPi.
+### No app modifications needed
 
-### Running the Automation Server
-In your application, you need to run the kvaut server. Here's an example of doing this in main.py of your kivy app. Even though it looks like it's always being run, it will only do any work if **KVAUT_ENABLE=1** is in your environment variables.
+Your Kivy app stays exactly as-is. kvaut handles the instrumentation automatically —
+just point it at your app's module path and it takes care of the rest.
 
-```
-import kvaut.server
+### Write a test
 
-if __name__ == '__main__':
-    kvaut.server.start_automation_server()
+```python
+import kvaut
 
-    # Start up our kivy application down here
-```
+client = kvaut.Client()
+client.connect("my_app.main")
 
-### Setting up the Automation Client
-Now we need to set up our first behave test to launch our app. In your `features\environment.py` file (create it if you don't have it), add something like this:
+# Find a button and click it
+btn = client.find(by_text="Save")
+client.click(btn)
 
-```
-import os
-import subprocess
-import kvaut.client
+# Find a TextInput and type into it
+input_field = client.find(by_type="TextInput")
+client.input_text(input_field, "Hello Kivy")
 
-APP_PATH = '<path to your app>'
+# Read text from a widget
+text = client.get_text(input_field)
+assert text == "Hello Kivy"
 
-def before_scenario(context, scenario):
-    os.environ['KVAUT_ENABLE'] = '1'
-    context.test_app_process = subprocess.Popen([APP_PATH], {'env':os.environ})
-    kvaut.client.wait_for_automation_server()
+# Check widget attributes
+attrs = client.get_attributes(btn, ["disabled", "text"])
+assert attrs["disabled"] is False
 
-def after_scenario(context, scenario):
-    if context.test_app_process:
-        subprocess.Popen.kill(context.test_app_process)
+client.disconnect()
 ```
 
-### Testing the App
-Now it's time to make assertions against the UI. Make a feature file `features/hello_world.feature`:
+### With pytest
 
-```
-Feature: Hello World
-  As a developer
-  I want to do automated testing
-  So I can refactor without worry
+kvaut provides an optional pytest fixture for automatic lifecycle management:
 
-  Scenario: Hello World
-    When I tap button "Say Hello"
-    Then I see "Hello World!"
-```
+```python
+import pytest
+from kvaut.errors import ElementNotFoundError
 
-Make a steps definition file `features/steps/hello_world_steps.py`:
+@pytest.mark.app_module("my_app.main")
+class TestApp:
+    def test_save_button(self, kvaut_client):
+        btn = kvaut_client.find(by_text="Save")
+        kvaut_client.click(btn)
+        text = kvaut_client.get_text(btn)
+        assert text == "Saved!"
 
-```
-import kvaut.client
-from behave import *
-
-use_step_matcher("re")
-
-@when(u'I tap button "(?P<button_text>[^"]*)"')
-def i_tap_button(step, button_text):
-  kvaut.client.tap(button_text)
-
-@then(u'I see "(?P<text>[^"]*)"')
-def i_see(step, text):
-  kvaut.client.assert_is_visible(text)
+    def test_cancel_button(self, kvaut_client):
+        with pytest.raises(ElementNotFoundError):
+            kvaut_client.find(by_text="Nonexistent")
 ```
 
-This, of course, assumes your kivy app has a button labeled 'Say Hello', and tapping that button will display the text 'Hello World!' somewhere. You should be able to run `behave` from your project directory and see the app launch and the button press down.
+### Finding elements
+
+kvaut uses an RTL-style approach: `find()` for a single element, `query()` for multiple.
+Both return opaque element ids that you pass to actions like `click()` and `input_text()`.
+
+`find()` raises an error if zero or more than one visible element matches.
+`query()` returns a list — empty if nothing matches.
+
+By default, only visible elements are searched. Pass `hidden=True` to include hidden elements
+(size zero, opacity zero, or no parent).
+
+```python
+# Single element — raises if ambiguous
+save_btn = client.find(by_text="Save")
+
+# Multiple elements — returns a list
+all_buttons = client.query(by_type="Button")
+for btn_id in all_buttons:
+    print(client.get_text(btn_id))
+
+# Include hidden elements
+hidden_btn = client.find(by_text="Hidden", hidden=True)
+
+# Regex matching
+import re
+client.find(by_text=re.compile(r"^Save"))
+```
 
 ## API Reference
 
-### kvaut.client
+### `kvaut.Client`
 
-**assert_is_visible(target)**</br>
-Searches for a target element by string value (currently text or id) in a wait loop and raises a `kvaut.errors.AssertionError` if no matching element is found within a timeout.
+| Method | Description |
+|---|---|
+| `connect(module_path)` | Launch the app under test as a subprocess and wait for it to be ready |
+| `disconnect()` | Stop the app under test |
+| `find(*, by_text, by_type, by_id, hidden=False)` | Find a single visible element. Raises `ElementNotFoundError` if 0 matches, `AmbiguousMatchError` if >1 |
+| `query(*, by_text, by_type, by_id, hidden=False)` | Find all matching elements. Returns a list (empty if none) |
+| `click(element_id)` | Tap the center of an element |
+| `input_text(element_id, text)` | Type text into a TextInput element. Raises `InvalidOperationError` if not a TextInput |
+| `get_text(element_id)` | Get the `text` property of an element |
+| `get_attributes(element_id, names)` | Get named widget attributes as a dict, e.g. `["disabled", "enabled"]` |
+| `tree()` | Return the full widget tree as a dict (for debugging) |
 
-**find_element(target)**</br>
-Searches for a target element by string value (currently text or id) and returns a JSON representation of the element as a `dict` or `None` if no matching element is found.
+### Selectors
 
-**tap(target)**</br>
-Asserts that a target element is visible by string value (currently text or id) and taps on the center of that element.
+- **`by_text`** — Match by widget text. Pass a string for exact match or a compiled `re.Pattern` for regex.
+- **`by_type`** — Match by widget class name, e.g. `"Button"`, `"TextInput"`.
+- **`by_id`** — Match by the kv lang `id` attribute.
 
-**wait_for_automation_server()**</br>
-Enters a wait loop for an automation server to be running. Raises a `kvaut.errors.ServerNotFoundError` if none are found within a timeout.
+### Exceptions
 
-## Other Examples
-To see a practical example of kvaut in action, check out [ci_screen_2](https://github.com/garyjohnson/ci_screen_2).
+All exceptions inherit from `kvaut.KvautError`:
 
-Also, kvaut uses itself for testing. You can run `behave` from the project directory to run the tests, and see the kivy apps used for testing in the `test_apps/` directory
+- `ElementNotFoundError` — `find()` matched 0 elements, or element id is stale
+- `AmbiguousMatchError` — `find()` matched >1 element
+- `ServerNotFoundError` — Server couldn't be reached or timed out on connect
+- `InvalidOperationError` — Operation on wrong widget type (e.g. `input_text` on a Button)
+
+## How it works
+
+kvaut uses a client/server architecture:
+
+1. **`client.connect("my_app.main")`** spawns a subprocess running `python -m kvaut.run my_app.main`
+2. **kvaut.run** starts an HTTP server (stdlib, no dependencies) in a background thread, imports the user's app module, finds the `App` subclass, and calls `App().run()`
+3. The **test side** communicates with the server over HTTP — finding widgets, dispatching taps, reading properties
+4. **`client.disconnect()`** kills the subprocess
+
+Your app code never imports kvaut. There is no instrumentation step. The `kvaut.run` entry point
+handles everything transparently.
+
+## Running tests
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
+
+For headless environments (CI), use xvfb:
+
+```bash
+xvfb-run -a pytest
+```
+
+Set `KVAUT_LOG=DEBUG` for verbose server output during debugging.
 
 ## Contributing
-To run kvaut tests, run `shovel test`. Tests are run using [tox](https://pypi.python.org/pypi/tox) so make sure it's installed and that you aren't already in a virtualenv. Tests are currently run against python2.7 and python3.4, so kivy needs to be installed and available in the $PYTHONPATH for both instances. (To install kivy as a python package on OSX, you can use [this gist](https://gist.github.com/garyjohnson/53c1eef4adaf57c247a4) for reference).
 
+See [CONTEXT.md](CONTEXT.md) for the project glossary and [docs/adr/](docs/adr/) for architecture
+decisions.

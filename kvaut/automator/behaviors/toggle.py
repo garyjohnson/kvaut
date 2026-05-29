@@ -1,3 +1,0 @@
-class ToggleBehavior(object):
-    pass
-
